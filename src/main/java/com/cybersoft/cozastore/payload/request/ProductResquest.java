@@ -1,9 +1,30 @@
 package com.cybersoft.cozastore.payload.request;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class ProductResquest {
 
+    @NotNull(message ="File ko dc null")
+    private MultipartFile file;
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    @NotBlank(message = "Vui long nhap ten")
     private String name;
+
+    @DecimalMin(value ="0.1" )
     private double price;
     private String desc;
     private int quantity;
