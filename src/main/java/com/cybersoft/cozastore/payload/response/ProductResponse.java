@@ -1,9 +1,28 @@
 package com.cybersoft.cozastore.payload.response;
 
 public class ProductResponse {
+    private int id;
     private String image;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String name;
     private double price;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getImage() {
         return image;

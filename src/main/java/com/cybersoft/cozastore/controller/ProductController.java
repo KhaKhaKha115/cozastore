@@ -4,12 +4,16 @@ import com.cybersoft.cozastore.payload.request.ProductResquest;
 import com.cybersoft.cozastore.payload.response.BaseResponse;
 import com.cybersoft.cozastore.service.ProductService;
 import com.cybersoft.cozastore.service.imp.IProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -22,13 +26,41 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("/product")
 public class ProductController {
 
+    @Value("${root.file.path}")
+    private String rootPath;
+
+    @Value("${host.name}")
+    private String hostName;
+
     @Autowired
-    private IProductService iProductService;
+    IProductService iProductService;
+
+    Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductByCategory(@PathVariable int id){
+    public ResponseEntity<?> getDetailProduct(
+            @PathVariable int id
+    ){
         BaseResponse response = new BaseResponse();
-        response.setData(iProductService.getProductByCategoryId(id));
+        response.setData(iProductService.getDetailProduct(id));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getProductByCategory(
+            HttpServletRequest request,
+            @PathVariable int id){
+
+        logger.trace("Hello Trace Logger");
+        logger.debug("Hello Debug");
+        logger.info("Hello Info");
+        logger.warn("Hello Warning");
+        logger.error("Hello Error");
+
+        String hostNameReq = request.getHeader("host");
+
+        BaseResponse response = new BaseResponse();
+        response.setData(iProductService.getProductByCategoryId(hostNameReq, id));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
